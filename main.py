@@ -1,5 +1,7 @@
 import pygame
+import pymunk
 import random
+
 from pygame.locals import (
     K_LEFT,
     K_RIGHT,
@@ -11,11 +13,15 @@ from pygame.locals import (
     QUIT,
 )
 
-SPEED       = 0.8
-SIZE        = 25
-FRICTION    = 0.01
-GRAVITY     = 0.01
-BOUNCE      = 2
+FPS	    = 60
+
+SPEED       = 4
+SIZE        = 15
+FRICTION    = 0.1
+GRAVITY     = 0.3
+BOUNCE      = 6
+
+clock = pygame.time.Clock()
 
 class Player():
 
@@ -95,10 +101,11 @@ def main():
     pygame.init()
     pygame.font.init() 
 
-    #flags = pygame.FULLSCREEN
-    screen = pygame.display.set_mode(([1920, 1280]),flags = 0, vsync=1)
+    flags = pygame.FULLSCREEN & pygame.DOUBLEBUF & pygame.HWSURFACE
+    resolution = pygame.display.list_modes()[0]
+    screen = pygame.display.set_mode(resolution,flags, vsync=1)
     running = True
-    x =  1920/2; y = 1280 / 2
+    x =  1440/2; y = 900 / 2
 
     player = Player(x,y-100,SIZE)
 
@@ -108,7 +115,7 @@ def main():
 #    platforms.append(Platform(x-80, y+15, 300))
 
     for _ in range(20): # create platforms at random placements
-        platforms.append(Platform(random.randint(1,1920-100), random.randint(1,1280-100), random.randint(100,400)))
+        platforms.append(Platform(random.randint(1,1440-100), random.randint(1,960-100), random.randint(100,400)))
 
 
     while running:
@@ -147,8 +154,10 @@ def main():
             platform.draw(screen)
 
         pygame.display.flip()
+        print(clock.tick(FPS))
 
     pygame.quit()
 
 if __name__ == "__main__":
     main()
+
